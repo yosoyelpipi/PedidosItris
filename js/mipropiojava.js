@@ -1,4 +1,5 @@
-	var i_log = 0;
+	var i_log = 0; 
+	
 function mkLog(text){
 	var date = new Date();
 	var txt = i_log + " - " + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds() + ": " + text; 
@@ -95,13 +96,13 @@ function ShowMenu(){
 	$("#configurado").hide();
 	$("#menuPrincial").show();
 }
-/*
+
 function ShowDownload(){
 					$("#menuPrincial").hide();
 					$("#bajada").html('Panel de sincronización.').show();
 					$("#download").show();	
 	}
-*/
+/*
 function ShowDownload(){	
 	var networkState = navigator.connection.type;
 	var states = {};
@@ -116,10 +117,10 @@ function ShowDownload(){
 	
 		if(navigator.network.connection.type == Connection.WIFI){
 			//No tenemos conexión
-			//alert(states[networkState]);
+			console.log(states[networkState]);
 			var existe = window.localStorage.getItem("ws");
 			if(!existe){
-					alert('Si bien detectamos que tu dispositivo tiene Wi-Fi, parece que aún no definiste los parámetros de conexión. Andá a la sección configuración y volvé por aquí.');
+					window.notification.alert('Si bien detectamos que tu dispositivo tiene Wi-Fi, parece que aún no definiste los parámetros de conexión. Andá a la sección configuración y volvé por aquí.');
 			}else{
 					$("#menuPrincial").hide();
 					$("#bajada").html('Panel de sincronización.').show();
@@ -131,7 +132,8 @@ function ShowDownload(){
 			alert('Detectamos que no estás conectado a ninguna red Wi-Fi, conectate a alguna red disponible y volvé por acá');
 		}	
 	}
-
+*/
+/*
 function ShowSync(){	
 	var networkState = navigator.connection.type;
 	var states = {};
@@ -161,14 +163,14 @@ function ShowSync(){
 			alert('Detectamos que no estás conectado a ninguna red Wi-Fi, conectate a alguna red disponible y volvé por acá');
 		}	
 	}
-/*
+*/
+
 function ShowSync(){
 					$("#menuPrincial").hide();
 					$("#bajada").html('Panel de sincronización.').show();
 					$("#sync").show();
 					
 			}
-*/
 			
 function ShowOrder(){
 		var existe = window.localStorage.getItem("ws");
@@ -558,7 +560,7 @@ function searchArtSuccess(tx, results){
 				console.log('Encontre esto: ' + artresult.fk_erp_articulos);
 				
 				//Imprimo los resultados encontrados.
-				$("#erpdetarticulossearch").append('<button type="button" onclick="clickMeArt(\' '+ artresult.fk_erp_articulos + ' \', \' '+ artresult.des_art +' \', \' '+ artresult.precio + '\' )";  class="list-group-item" >'+ artresult.fk_erp_articulos +' - '+ artresult.des_art +' <span class="badge">$ '+ artresult.precio +'</span></button>');
+				$("#erpdetarticulossearch").append('<button type="button" onclick="clickMeArt(\' '+ artresult.fk_erp_articulos + ' \', \' '+ artresult.des_art +' \', \' '+ artresult.precio + '\' )";  class="list-group-item" >'+ artresult.fk_erp_articulos +' - '+ artresult.des_art +' <span class="badge">$ '+ artresult.precio +'</span></button><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
 			}
 	}	
 }
@@ -606,11 +608,6 @@ function searchEmpSuccess(tx, results){
 	
 		for(var x=0; x<results.rows.length; x++){
 				var empresult = results.rows.item(x);
-				//Muestro la sección del buscador.
-				$("#googleEmp").show();
-				//Limpio la sección de resultados del buscador.
-				$("#erpempresassearch").show();
-				//Grabo en la consola el estado de los resultados.
 				console.log('Encontre esto: ' + empresult.descripcion);
 				
 				//Imprimo los resultados encontrados.
@@ -664,6 +661,27 @@ function clickMeArt(erp_articulos, descrip, costo){
 	window.localStorage.setItem("fk_erp_empresa", emPed.innerText);
 	window.localStorage.setItem("fk_erp_articulos", erp_articulos);
 	window.localStorage.setItem("precio", costo);
+	
+	showPrompt();
+	
+	// process the promp dialog results
+	function onPrompt(results) {
+		alert("You selected button number " + results.buttonIndex + " and entered " + results.input1);
+	}
+
+	// Show a custom prompt dialog
+	//
+	function showPrompt() {
+		navigator.notification.prompt(
+			'Please enter your name',  // message
+			onPrompt,                  // callback to invoke
+			'Registration',            // title
+			['Ok','Exit'],             // buttonLabels
+			'Jane Doe'                 // defaultText
+		);
+	}	
+	
+	
 	grabaDatos();	
 }
 /*
